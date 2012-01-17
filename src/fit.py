@@ -34,6 +34,8 @@ for r in csv.reader(sys.stdin):
 		print "Skipping text values (%s)"%','.join(r)
 fr = FitPulseFunc(d, p0)
 print fr.fit()
+
 print
-for row in fr.eval():
-	print "%f,%f"%tuple(row)
+wrt = csv.writer(sys.stdout)
+for r1, r2 in zip(fr.eval(), d):
+	wrt.writerow(r1+r2)

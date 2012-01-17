@@ -88,11 +88,11 @@ class func(object):
 			print "%s, %s"%(str(t), str(self.eval(t)))
 
 	def __repr__(self):
-		res = "\nA=%f\nalpha=%f\nbeta=%f\ntOffset=%f\n"%tuple(self.getParList())
-		res += "TPeak=%f, FPeak=%f\n"%self.getPeakTime()
-		res += "TAvgT=%f, FAvg=%f\n"%self.getAvgT()
-		res += "Norm=%f\n"%self.getNormFactor()
-		res += "T1/2life=%f, F1/2Life=%f\n"%self.getInvFunc(self.getPeakValue()/2.)
+		res = "\n#  A=%f\n#  alpha=%f\n#  beta=%f\n#  tOffset=%f\n"%tuple(self.getParList())
+		res += "#  TPeak=%f,    FPeak=%f\n"%self.getPeakTime()
+		res += "#  TAvgT=%f,    FAvg=%f\n"%self.getAvgT()
+		res += "#  Norm=%f\n"%self.getNormFactor()
+		res += "#  T1/2life=%f, F1/2Life=%f\n"%self.getInvFunc(self.getPeakValue()/2.)
 		return res
 
 #############
