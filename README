@@ -1,0 +1,95 @@
+Social Activity Pulse
+
+When a story breaks on Twitter or other social media, there is a surge of activity.
+
+The surge or pulse of activity can be characterized by the time it takes to reach
+its peak, the height of the peak, the 1/2 life of the surge in activity etc. To
+compare stories, it is useful to fit the data to a standard pulse function in 
+order to compare attributes consistently.
+
+Example: See the graph at http://blog.gnip.com/wp-content/uploads/2012/01/pubfits.png (associated with the
+article at  http://blog.gnip.com/twitter-shouts-huntsmans-out/)
+
+The fit.py utility uses a double exponential peak to model the pulse:
+
+    A(t) = A0 * (1 -exp(-alpha * (t-t0))) * exp(-beta * (t-t0))
+
+Requires the scipy module.
+
+Usage:
+
+Example 1:
+
+To fit the function, send data to standard input (fit.py).
+
+This will calculate the best fit for A0 (shown as A below), alpha, beta, the starting time
+of the pulse (t0 = tOffset, the time at the peak, the value at the Peak, the average or
+first moment of the the pulse and the associated function value, the area under the curve (Norm)
+and the 1/2 life with the associated function value.
+
+If you don't specify any arguments, fit.py assumes your data consists of 2 columns (text headers ok)
+and fit.py tries to guess initial parameters for the fit.
+
+For instance,
+
+Scott-Hendricksons-MacBook-Pro ~/IdeaProjects/Social-Activity-Pulse-Function/src> cat data.csv | ./fit.py 
+
+A=30249.999957
+alpha=690.000010
+beta=30.500000
+tOffset=0.000000
+TPeak=0.004583, FPeak=25190.404130
+TAvgT=0.034175, FAvg=10667.102466
+Norm=949.818545
+T1/2life=0.028727, F1/2Life=12595.202065
+
+
+0.000000,0.000000
+0.001010,14722.086939
+0.002020,21385.932858
+0.003030,24171.351020
+0.004040,25096.701275
+0.005051,25136.414624
+0.006061,24760.736280
+0.007071,24196.410980
+0.008081,23552.588707
+0.009091,22881.634431
+0.010101,22208.497726
+0.011111,21544.897413
+...
+
+
+In addition to the fit paraters, the output also provides the function fit values
+at the input data points to make it simple to calculate error or visualize the pulse against the data.
+
+Example 2:
+
+To specify initial values of fit parameters (e.g to fit a specific pulse in to a timeseries with more than
+one pulse), use 
+	fit.py -p"[A, alpha, beta, offset]"
+
+Example 3:
+
+To specify an alternate column for fit data, use -c (counting starts at 0). For example, if time is in
+column 1 and your data is in column 4: 
+	fit.py -c3
+
+Example 4:
+
+Getting help:
+
+Scott-Hendricksons-MacBook-Pro ~/IdeaProjects/Social-Activity-Pulse-Function/src> ./fit.py -h
+Usage: fit.py [options]
+
+Options:
+  -h, --help            show this help message and exit
+  -p INIT_PARAMETERS, --init-parameters=INIT_PARAMETERS
+                        Iinitial guess of parameters [A, alpha, beta, offset]
+                        ([] or blank ok)
+  -c COLUMN, --column=COLUMN
+                        Column for fit data (0 is independent var, default
+                        dependent is 1)
+
+(Or just read the code.)
+
+Copyright 2012. Licensed under GPL.
