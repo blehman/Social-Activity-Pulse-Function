@@ -34,7 +34,7 @@ moment) of the the pulse and the function value at tavg, the area under the curv
 and the 1/2 life-with the associated function value at t1/2.
 
 If you don't specify any arguments, fit.py assumes your data consists of 2 columns (text headers ok)
-and fit.py tries to guess initial parameters for the fit.
+and PulseFunc.py tries to guess initial parameters for the fit.
 
 For instance, using the example file provided,
 
@@ -72,6 +72,9 @@ Scott-Hendricksons-MacBook-Pro ~/IdeaProjects/Social-Activity-Pulse-Function/src
 0.0232323232323,14831.4365503,0.0232323232323,15589.5707733
 ...
 
+NOTE: PulseFunc.py now outputs an additional time column at position 3 based on the t0 = 0.
+This is useful for giving pulses a common baseline for comparing half-lives, peaks, etc
+on a graph.
 
 In addition to the fit parameters, the output also provides the function evaluated at the 
 input data (time) points (first 2 columns) along side the original data (remaining columns).  

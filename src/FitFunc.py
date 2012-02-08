@@ -35,7 +35,7 @@ class FitFunc(object):
 	def eval(self):
 		res = []
 		for i in self.x:
-			res.append([i, self.f.eval(i)])
+			res.append( [i] + self.f.eval(i) )
 		return res
 
 #########################

@@ -6,8 +6,9 @@
 #########################
 import math
 import sys
+from FuncBase import FuncBase
 
-class func(object):
+class func(FuncBase):
 	""" This is the pulse function and associated unilities for evaluating and fitting. """
 	
 	def __init__(self, _A=1., _alpha=1., _beta=1., toff=0.):
@@ -19,27 +20,15 @@ class func(object):
 	def eval(self, x, baseline=None):
 		if x - self.t0 < 0.0:
 			if baseline is not None:
-				return baseline
+				return [baseline]
 			else:
-				return 0.0
+				return [0.0]
 		# the pulse function
 		v = self.A * (1.0 - math.exp(-(x-self.t0)*self.alpha)) * math.exp(-(x-self.t0)*self.beta)
-		return v
-
-        def evalVec(self, v):
-		# Eval a vector of inputs
-		return [self.eval(i) for i in v]
+		return [v, x - self.t0]
 
 	# Utility functions for curve fitting
 
-	def erf(self, par, x, y):
-		# return the point-by-point delta
-		res = []
-		self.setParList(par)
-		for i in range(0,len(y)):
-			res.append(self.eval(x[i]) - y[i])
-		return res
-	
 	def setParList(self, par):
 		[self.A, self.alpha, self.beta, self.t0] = par
 
@@ -53,7 +42,7 @@ class func(object):
 
 	def getAvgT(self):
 		ta = (self.alpha + 2.* self.beta)/(self.beta*(self.alpha + self.beta))
-		return ta + self.t0, self.eval(ta + self.t0)
+		return ta + self.t0, self.eval(ta + self.t0)[0]
 
 	def getPeakValue(self):
 		return self.A*self.alpha*math.pow((1.+self.alpha/self.beta),(-1-self.beta/self.alpha))/self.beta
@@ -71,8 +60,8 @@ class func(object):
 		while abs(tg - t) > eps:
 			tg = t
 			t = self.tUpdater(tg, v)
-			#print "<<<",tg,t,self.eval(t),">>>"
-		return t+self.t0,self.eval(t + self.t0)
+			#print "<<<",tg,t,self.eval(t)[0],">>>"
+		return t+self.t0,self.eval(t + self.t0)[0]
 
 	def tUpdater(self, tg, v):
 		num = self.A*(1. - math.exp(-self.alpha*tg))*math.exp(-self.beta*tg) - v
@@ -91,12 +80,6 @@ class func(object):
 		return res
 
 	# Output
-	
-	def printPoints(self, s, e, n=100):
-		delta = (float(e) - float(s))/(n-1)
-		for i in range(0,n):
-			t = s + i*delta
-			print "%s, %s"%(str(t), str(self.eval(t)))
 
 	def __repr__(self):
 		res = "\n#  A=%f\n#  alpha=%f\n#  beta=%f\n#  tOffset=%f\n"%tuple(self.getParList())
