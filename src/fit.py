@@ -12,6 +12,7 @@ from optparse import OptionParser
 from FitFunc import *
 import PulseFunc
 import LogNormalCDFFunc
+import GaussFunc
 
 parser = OptionParser()
 parser.add_option("-p", "--init-parameters", dest="init_parameters",
@@ -19,7 +20,7 @@ parser.add_option("-p", "--init-parameters", dest="init_parameters",
 parser.add_option("-c", "--column",  dest="column", default=1,
 				  help="Column for fit data (0 is independent var, default dependent is 1)")
 parser.add_option("-f", "--func-name",  dest="func_name", default="pulse",
-				  help="pulse - Pulse Function (default); lognorm - log-normal CDF")
+				  help="pulse - Pulse Function (default); lognorm - log-normal CDF; gauss - gaussian PDF")
 (options, args) = parser.parse_args()
 
 # p0 = [A, alpha, beta, t0]
@@ -39,6 +40,8 @@ for r in csv.reader(sys.stdin):
 
 if options.func_name == "lognorm":
 	func = LogNormalCDFFunc.func()
+elif options.func_name == "gauss":
+	func = GaussFunc.func()
 else:
 	func = PulseFunc.func()
 fr = FitFunc(d, func, p0)
