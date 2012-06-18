@@ -1,15 +1,13 @@
 #!/usr/bin/env python
-#
-#   Scott Hendrickson
-#    2012-01-13
-#
-#########################
+__author__="Scott Hendrickson"
+__email__="shendrickson@gnip.com"
+__license__="http://creativecommons.org/licenses/by-sa/3.0/"
+###
 
 import math
 import sys
+import numpy
 from scipy import optimize
-
-import PulseFunc
 
 class FitFunc(object):
 	def __init__(self, _data, _funcObj, _guess=None):
@@ -32,14 +30,18 @@ class FitFunc(object):
 		self.f.setParList(self.fitPars)
 		return self.f
 
-	def eval(self):
-		res = []
-		for i in self.x:
-			res.append( [i] + self.f.eval(i) )
-		return res
+	def eval(self, start=None, end=None, points=None):
+		if start is None or end is None or points is None:
+			t = self.x
+		else:
+			t = list(numpy.linspace(start,end,points))
+		return [p for p in self.f.evalPoints(t)]
 
 #########################
 if __name__ == '__main__':
+	
+	import PulseFunc
+	
 	# simple demos
 	pf = PulseFunc.func(_A=30250, _alpha=690, _beta=30.5)
 	pf.printPoints(0, .1)

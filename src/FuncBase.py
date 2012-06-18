@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-#
-#   Scott Hendrickson
-#    2011-11-03
-#
-#########################
+__author__="Scott Hendrickson"
+__email__="shendrickson@gnip.com"
+__license__="http://creativecommons.org/licenses/by-sa/3.0/"
+###
+
 import math
 import sys
+import numpy
 
 class FuncBase(object):
 	
@@ -21,10 +22,12 @@ class FuncBase(object):
 			res.append(self.eval(x[i])[0] - y[i])
 		return res
 	
+	def evalPoints(self, t):
+		for i,j in zip(t, self.evalVec(t)):
+			yield [i,j]
+
 	def printPoints(self, s, e, n=100):
-		delta = (float(e) - float(s))/(n-1)
-		for i in range(0,n):
-			t = s + i*delta
-			dataTuple = tuple([str(t)] + [str(x) for x in self.eval(t)])
+		# convenience printing function
+		for dataTuple in self.evalPoints(numpy.linspace(s,e,n)):
 			fmtStr = "%s, "*(len(dataTuple)-1) + "%s"
-			print fmtStr%dataTuple
+			print fmtStr%tuple(dataTuple)

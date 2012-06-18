@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-#
-#   Scott Hendrickson
-#    2012-91-17
-#
-#########################
+__author__="Scott Hendrickson"
+__email__="shendrickson@gnip.com"
+__license__="http://creativecommons.org/licenses/by-sa/3.0/"
+###
+
 import math
 import sys
 from FuncBase import FuncBase
@@ -31,6 +31,7 @@ class func(FuncBase):
 
 	def guessFromData(self, x, y):
 		ymax = -99999
+		xymax = 0
 		for i in range(0,len(y)):
 			if y[i] > ymax:
 				ymax = y[i]
