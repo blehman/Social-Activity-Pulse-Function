@@ -1,13 +1,20 @@
-Social Activity Pulse
+                              Function Fitting Utilities 
+                                      including
+                                Social Activity Pulse
 
-When a story breaks on Twitter or other social media, there is a surge of activity.
 
 See https://gnip.com.s3.amazonaws.com/ScottHendrickson/SocialMediaPulse.pdf for additional information.
+
+
+DOUBLE EXPONENTIAL
+==================
 
 The surge or pulse of activity can be characterized by the time it takes to reach
 its peak, the height of the peak, the 1/2 life of the surge in activity, etc. To
 compare stories or media souces, it is useful to fit the data to a standard pulse function in 
 order to compare attributes consistently.
+
+One convenient model is that the traffic follows a double exponential function.
 
 Example: See the graph at http://blog.gnip.com/wp-content/uploads/2012/01/pubfits.png (associated 
 with the article at  http://blog.gnip.com/twitter-shouts-huntsmans-out/)
@@ -40,7 +47,7 @@ and PulseFunc.py tries to guess initial parameters for the fit.
 
 For instance, using the example file provided,
 
-Scott-Hendricksons-MacBook-Pro ~/IdeaProjects/Social-Activity-Pulse-Function/src> cat data.csv | ./fit.py 
+> cat data.csv | ./fit.py 
 
 #  A=30056.640395
 #  alpha=706.789547
@@ -108,7 +115,7 @@ Example 5:
 
 Getting help:
 
-Scott-Hendricksons-MacBook-Pro ~/IdeaProjects/Social-Activity-Pulse-Function/src> ./fit.py -h
+> ./fit.py -h
 Usage: fit.py [options]
 
 Options:

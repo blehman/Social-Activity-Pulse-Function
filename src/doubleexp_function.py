@@ -6,9 +6,9 @@ __license__="http://creativecommons.org/licenses/by-sa/3.0/"
 
 import math
 import sys
-from FuncBase import FuncBase
+from base_function import base_function
 
-class func(FuncBase):
+class func(base_function):
 	""" This is the pulse function and associated unilities for evaluating and fitting. """
 	
 	def __init__(self, _A=1., _alpha=1., _beta=1., toff=0.):

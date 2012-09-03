@@ -9,7 +9,7 @@ import sys
 import numpy
 from scipy import optimize
 
-class FitFunc(object):
+class function_fit(object):
 	def __init__(self, _data, _funcObj, _guess=None):
 		self.f = _funcObj
 		self.toVecs(_data)
@@ -40,10 +40,10 @@ class FitFunc(object):
 #########################
 if __name__ == '__main__':
 	
-	import PulseFunc
+	import doubleexp_function
 	
 	# simple demos
-	pf = PulseFunc.func(_A=30250, _alpha=690, _beta=30.5)
+	pf = doubleexp_function.func(_A=30250, _alpha=690, _beta=30.5)
 	pf.printPoints(0, .1)
 	print pf
 
@@ -72,11 +72,11 @@ if __name__ == '__main__':
 		(0.0939393939394, 1723.47856384),
 		(0.0989898989899, 1477.43025624)     ]
 	print p0
-	fun = PulseFunc.func()
-	fr = FitFunc(v, fun, p0)
+	fun = doubleexp_function.func()
+	fr = function_fit(v, fun, p0)
 	print fr.fit()
 	# Use init param calculation algorithm
-	fun1 = PulseFunc.func()
-	fr = FitFunc(v, fun1)
+	fun1 = doubleexp_function.func()
+	fr = function_fit(v, fun1)
 	print fr.fit()
 

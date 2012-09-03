@@ -6,11 +6,11 @@ __license__="http://creativecommons.org/licenses/by-sa/3.0/"
 
 import math
 import sys
-from FuncBase import FuncBase
+from base_function import base_function
 
 import scipy.special
 
-class func(FuncBase):
+class func(base_function):
 	""" This is the gauss function and associated unilities for evaluating and fitting. """
 	
 	def __init__(self, _x0 = 0., _a = 1., _A0 = 1.):

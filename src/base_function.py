@@ -8,7 +8,7 @@ import math
 import sys
 import numpy
 
-class FuncBase(object):
+class base_function(object):
 	
         def evalVec(self, v):
 		# Eval a vector of inputs
