@@ -5,13 +5,10 @@ __license__="http://creativecommons.org/licenses/by-sa/3.0/"
 ###
 
 import math
-import sys
 from base_function import base_function
 
-import scipy.special
-
 class func(base_function):
-    """ This is the gauss function and associated unilities for evaluating and fitting. """
+    """ This is the exponential function and associated unilities for evaluating and fitting. """
     
     def __init__(self, _x0 = 0., _a = 1., _A0 = 1.):
         self.x0 = float(_x0)
@@ -31,8 +28,8 @@ class func(base_function):
     def guessFromData(self, x, y):
         a = (math.log(y[-1]) - math.log(y[0]))/(x[-1] - x[0])
         A = y[0]
-        x0 = 2.0*x[0] - x[-1]
-        res = [xo, a, A]
+        x0 = x[0] 
+        res = [x0, a, A]
         return res
 
     # Output
