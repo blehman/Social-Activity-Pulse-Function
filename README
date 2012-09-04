@@ -3,16 +3,28 @@
                                 Social Activity Pulse
 
 
+The surge or pulse of social media activity can be characterized by the time it takes to reach
+its peak, the height of the peak, the 1/2 life of the surge in activity, etc. To
+compare stories or media souces, it is useful to fit the data to a standard pulse function in 
+order to compare attributes consistently.
+
 See https://gnip.com.s3.amazonaws.com/ScottHendrickson/SocialMediaPulse.pdf for additional information.
+
+GAMMA DISTRIBUTION
+==================
+
+When the event is characterized by a homogenious poisson counting process, the social media pulse 
+is modeled by a gamma distribution.
+
+    A(t) = A0 * beta^-alpha * (t-t0)^(alpha-1) * exp(-(t-t0)/beta) / gamma(a)
+
+t - time
+t0 - start of pulse
+A0, alpha, beta are parameters describing magnitude, geometric growth and exponential decay.
 
 
 DOUBLE EXPONENTIAL
 ==================
-
-The surge or pulse of activity can be characterized by the time it takes to reach
-its peak, the height of the peak, the 1/2 life of the surge in activity, etc. To
-compare stories or media souces, it is useful to fit the data to a standard pulse function in 
-order to compare attributes consistently.
 
 One convenient model is that the traffic follows a double exponential function.
 
@@ -26,6 +38,9 @@ The fit.py utility fits the pulse in activity to a double exponential model of t
 t - time
 t0 - start of pulse
 A0, alpha, beta are parameters describing magnitude, growth and decay.
+
+FITS
+====
 
 fit.py requires the scipy module.
 
@@ -43,11 +58,11 @@ moment) of the the pulse and the function value at tavg, the area under the curv
 and the 1/2 life-with the associated function value at t1/2.
 
 If you don't specify any arguments, fit.py assumes your data consists of 2 columns (text headers ok)
-and PulseFunc.py tries to guess initial parameters for the fit.
+and doubleexp_function.py tries to guess initial parameters for the fit.
 
 For instance, using the example file provided,
 
-> cat data.csv | ./fit.py 
+> cat pulse.csv | ./fit.py 
 
 #  A=30056.640395
 #  alpha=706.789547
@@ -81,7 +96,7 @@ For instance, using the example file provided,
 0.0232323232323,14831.4365503,0.0232323232323,15589.5707733
 ...
 
-NOTE: PulseFunc.py now outputs an additional time column at position 3 based on the t0 = 0.
+NOTE: doubleexp_function.py now outputs an additional time column at position 3 based on the t0 = 0.
 This is useful for giving pulses a common baseline for comparing half-lives, peaks, etc
 on a graph.
 
@@ -91,18 +106,47 @@ This makes it simple to calculate error or visualize the pulse against the data.
 
 Example 2:
 
+Fit to gamma distribution,
+
+> cat pulse.csv | ./fit.py -fgamma 
+
+#  x0=0.002020
+#  a=1.026359
+#  b=0.031917
+#  A0=919.468975
+#  tOffset=0.002020
+#  tavg=0.034779   f(tavg)=10481.683577i
+#  tpeak=0.002861   f(tpeak)=25870.541585
+
+0.0,0.0,0.0,0.0
+0.0010101010101,14480.8439804,0.0010101010101,0.0
+0.0020202020202,19463.6955929,0.0020202020202,19463.6851941
+0.0030303030303,23247.1318939,0.0030303030303,25858.4136042
+0.0040404040404,27212.7301957,0.0040404040404,25514.8009723
+0.00505050505051,26272.1642341,0.00505050505051,24985.5731713
+0.00606060606061,25636.5140401,0.00606060606061,24391.4798319
+0.00707070707071,24259.3154772,0.00707070707071,23771.0403792
+0.00808080808081,25528.2671864,0.00808080808081,23141.4691525
+0.00909090909091,20681.9249606,0.00909090909091,22511.8498162
+0.010101010101,22121.6544239,0.010101010101,21887.4618773
+0.0111111111111,19854.0500165,0.0111111111111,21271.5602281
+0.0131313131313,19291.9769569,0.0131313131313,20072.7914575
+...
+
+Example 3:
+
 To specify initial values of fit parameters, use,
 
 	fit.py -p"[A, alpha, beta, offset]"
 
-Example 3:
+Example 4:
 
 To specify an alternate column for fit data, use -c (counting starts at 0). For example, if time is in
 column 1 and your data is in column 4: 
 
 	fit.py -c3
 
-Example 4:
+Example 5:
 
 To specify a custom function evaluation range, use -r.
 
@@ -111,7 +155,7 @@ To specify a custom function evaluation range, use -r.
 Outputs an outer join of the data and the fit function evaluated at the points in the range specified, 
 in this case 100 points spanning 0 to 10.
 
-Example 5:
+Example 6:
 
 Getting help:
 
@@ -127,13 +171,13 @@ Options:
                         Column for fit data (0 is independent var, default
                         dependent is 1)
   -f FUNC_NAME, --func-name=FUNC_NAME
-                        pulse - Pulse Function (default); lognorm - log-normal
-                        CDF; gauss - gaussian PDF
+                        gamma - gamma distribution; exp - exponential; dubex -
+                        Pulse Function (default); lognorm - log-normal CDF;
+                        gauss - gaussian PDF
   -r RANGE_STRING, --range-list=RANGE_STRING
                         Function evaluation output range as '[start time, end
                         time, number of points]' If not set, evaluate at fit
                         points.
-
 
 (Or read the code.)
 

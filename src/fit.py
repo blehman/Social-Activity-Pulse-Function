@@ -14,6 +14,7 @@ import doubleexp_function
 import lognormal_function
 import gauss_function
 import exp_function
+import gamma_function
 
 parser = OptionParser()
 parser.add_option("-p", "--init-parameters", dest="init_parameters",
@@ -21,7 +22,7 @@ parser.add_option("-p", "--init-parameters", dest="init_parameters",
 parser.add_option("-c", "--column",  dest="column", default=1,
 		help="Column for fit data (0 is independent var, default dependent is 1)")
 parser.add_option("-f", "--func-name",  dest="func_name", default="dubex",
-		help="exp - exponential; dubex - Pulse Function (default); lognorm - log-normal CDF; gauss - gaussian PDF")
+		help="gamma - gamma distribution; exp - exponential; dubex - Pulse Function (default); lognorm - log-normal CDF; gauss - gaussian PDF")
 parser.add_option("-r", "--range-list", dest="range_string", default = "[]",
 		help="Function evaluation output range as '[start time, end time, number of points]' If not set, evaluate at fit points.")
 (options, args) = parser.parse_args()
@@ -53,6 +54,8 @@ elif options.func_name == "gauss":
 	func = gauss_function.func()
 elif options.func_name == "exp":
 	func = exp_function.func()
+elif options.func_name == "gamma":
+	func = gamma_function.func()
 else:
 	func = doubleexp_function.func()
 fr = function_fit(d, func, p0)
