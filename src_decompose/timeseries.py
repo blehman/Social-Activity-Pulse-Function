@@ -11,7 +11,6 @@ from optparse import OptionParser
 import datetime
 import re
 import time
-
 import timeseries_decompose
 
 parser = OptionParser()
@@ -60,8 +59,5 @@ for r in csv.reader(sys.stdin):
     except ValueError, e:
         print "Skipping text values (%s)"%','.join(r)
 
-#
-
 tss = timeseries_decompose.timeseries_decompose(data)
 tss.csv()
-

@@ -2,20 +2,17 @@
 __author__="Scott Hendrickson"
 __email__="shendrickson@gnip.com"
 __license__="http://creativecommons.org/licenses/by-sa/3.0/"
-###
-
 import math
 import sys
 from base_function import base_function
 
 class func(base_function):
 	""" This is the pulse function and associated unilities for evaluating and fitting. """
-	
-	def __init__(self, _A=1., _alpha=1., _beta=1., toff=0.):
+	def __init__(self, _A=1., _alpha=1., _beta=1., _toff=0.):
 		self.A = float(_A)
 		self.alpha = float(_alpha)
 		self.beta = float(_beta)
-		self.t0 = float(toff)
+		self.t0 = float(_toff)
 
 	def eval(self, x, baseline=None):
 		if x - self.t0 < 0.0:
@@ -27,8 +24,6 @@ class func(base_function):
 		v = self.A * (1.0 - math.exp(-(x-self.t0)*self.alpha)) * math.exp(-(x-self.t0)*self.beta)
 		return [v, x - self.t0]
 
-	# Utility functions for curve fitting
-
 	def setParList(self, par):
 		[self.A, self.alpha, self.beta, self.t0] = par
 
@@ -36,7 +31,6 @@ class func(base_function):
 		return [self.A, self.alpha, self.beta, self.t0]
 
 	# Attributes of the fitted curve
-
 	def getNormFactor(self):
 		return self.alpha * self.A / (self.beta**2 + self.alpha * self.beta)
 

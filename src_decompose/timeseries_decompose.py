@@ -15,8 +15,9 @@ fmtStr = "%Y-%m-%d %H:%M:%S"
 class timeseries_decompose(object):
     def __init__(self, data):
         # data is datestring, timestamp, value
-        self.data = [ [datetime.datetime.strptime(d[0], fmtStr), d[1], d[2], 0, 0, 0] for d in data ]
-        self.csv()
+        # shift epoch for exp fit and count by hours
+        epoch = data[0][1]
+        self.data = [ [datetime.datetime.strptime(d[0], fmtStr), (d[1]-epoch)/3600., d[2], 0, 0, 0] for d in data ]
         self.fitExp()
         self.dowFactors()
         self.hodFactors()
@@ -30,7 +31,7 @@ class timeseries_decompose(object):
         ef = function_fit.function_fit(tmp, exp_function.func())
         print str(ef.fit())
         for d in self.data:
-            d[3] = d[2] - ef.eval(d[1])
+            d[3] = d[2] - ef.f.eval(d[1])[0]
 
         
     def dowFactors(self):
@@ -41,11 +42,11 @@ class timeseries_decompose(object):
         avgDay = sum(counts.values())/7.
         dowF = {}
         for c in counts:
-            dowF[c] = float(counts)/avgDay
+            dowF[c] = float(counts[c])/avgDay
         for d in self.data:
             d[4] = d[3]/dowF[d[0].weekday()]
 
-    def dowFactors(self):
+    def hodFactors(self):
         counts = {}
         for i in range(24):
             counts[i] = 0
@@ -54,7 +55,7 @@ class timeseries_decompose(object):
         avgHour = sum(counts.values())/24.
         dohF = {}
         for c in counts:
-            dohF[c] = float(counts)/avgHour
+            dohF[c] = float(counts[c])/avgHour
         for d in self.data:
             d[5] = d[4]/dohF[d[0].hour]
            

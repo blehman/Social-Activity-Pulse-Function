@@ -2,45 +2,41 @@
 __author__="Scott Hendrickson"
 __email__="shendrickson@gnip.com"
 __license__="http://creativecommons.org/licenses/by-sa/3.0/"
-###
-
 import math
+import numpy
 from base_function import base_function
 
 class func(base_function):
-    """ This is the exponential function and associated unilities for evaluating and fitting. """
-    
-    def __init__(self, _x0 = 0., _a = 1., _A0 = 1.):
-        self.x0 = float(_x0)
+    """ This is the exponential function and associated utilities for evaluating and fitting. """
+    def __init__(self, _a = 1., _A0 = 1.):
         self.a = float(_a)
         self.A0 = float(_A0)
 
     def eval(self, x, baseline=None):
-        arg = (x - self.x0)
-        return [self.A0 * math.exp(self.a * arg)]
+        return [self.A0 * math.exp(self.a * x)]
 
     def setParList(self, par):
-        [self.x0, self.a, self.A0] = par
+        [self.a, self.A0] = par
 
     def getParList(self):
-        return [self.x0, self.a, self.A0]
+        return [self.a, self.A0]
 
     def guessFromData(self, x, y):
+        l = int(0.1*len(x))
+        y1 = numpy.average(numpy.log(y[-l:]))
+        y0 = numpy.average(numpy.log(y[:l]))
         a = (math.log(y[-1]) - math.log(y[0]))/(x[-1] - x[0])
         A = y[0]
-        x0 = x[0] 
-        res = [x0, a, A]
-        return res
+        return [a, A]
 
     # Output
-    
     def __repr__(self):
-        res = "\n#  x0=%f\n#  a=%f\n#  A0=%f"%tuple(self.getParList())
+        res = "\n#  a=%f\n#  A0=%f"%tuple(self.getParList())
         return res
 
 #########################
 if __name__ == '__main__':
     # simple demos
-    pf = func(_x0 = 4, _a=2., _A0=1)
-    pf.printPoints(0, 8.)
+    pf = func(_a=-0.1, _A0=5)
+    pf.printPoints(10, 18.)
     print pf
