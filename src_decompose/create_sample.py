@@ -4,15 +4,13 @@ import random
 import datetime
 
 A = 100
-alpha = 0.0009
+alpha = 0.0005
 B = .05/2.
 wb = 2*math.pi/(7*24)
 C = .1/2.
-#C = 100
 wc = 2*math.pi/24
 
 starttime = datetime.datetime(2010, 01, 01)
-
 for i in range(25*24*7):
     t = starttime +  datetime.timedelta(0, 3600*i)
     val = A*math.exp(alpha*i)*(1. + B*(1.+math.cos(wb*i)) + C*(1.+math.cos(wc*i)))
