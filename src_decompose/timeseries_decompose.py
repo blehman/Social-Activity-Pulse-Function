@@ -71,7 +71,7 @@ class timeseries_decompose(object):
         return int(dt.weekday() * 24 + dt.hour)
 
     def csv(self):
-        print "date, ts, original, detrended, weekly, daily"
+        print "date, ts, Original,Detrended,HourOfDay,HourOfWeek"
         for d in self.data:
             print ','.join([str(x) for x in d])
 

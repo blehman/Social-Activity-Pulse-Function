@@ -45,7 +45,7 @@ for r in csv.reader(sys.stdin):
         rowTime = timeRE.search(' '.join(r)).group(0).replace("T"," ")
     except AttributeError, e:
         print >>sys.stderr, str(e), str(r)
-        sys.exit()
+        continue
     sampleDatetime = datetime.datetime.strptime(rowTime, fmtStr)
     try:
         # first column is datetime string

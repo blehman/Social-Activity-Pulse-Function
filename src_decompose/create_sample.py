@@ -16,6 +16,7 @@ starttime = datetime.datetime(2010, 01, 01)
 for i in range(25*24*7):
     t = starttime +  datetime.timedelta(0, 3600*i)
     val = A*math.exp(alpha*i)*(1. + B*(1.+math.cos(wb*i)) + C*(1.+math.cos(wc*i)))
-    if i == 621 or i == 622:
-        val += 100
-    print ','.join([str(t), str(val)])
+    event = 0
+    if i == 621 or i == 624:
+        event = 100
+    print ','.join([str(t), str(val), str(val + event)])
