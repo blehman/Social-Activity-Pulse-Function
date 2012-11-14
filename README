@@ -16,17 +16,23 @@ GAMMA DISTRIBUTION
 When the event is characterized by a homogenious poisson counting process, the social media pulse 
 is modeled by a gamma distribution.
 
-    A(t) = A0 * beta^-alpha * (t-t0)^(alpha-1) * exp(-(t-t0)/beta) / gamma(a)
+    A(t) = beta^-alpha * A0*(t-t0)^(alpha-1) * exp(-A0*(t-t0)/beta) / gamma(a)
 
 t - time
 t0 - start of pulse
-A0, alpha, beta are parameters describing magnitude, geometric growth and exponential decay.
+alpha, beta are parameters describing magnitude, geometric growth and exponential decay.
+A0 - normalize the values to estimate probability, useful for fitting counts directly
+
+To ensure numerical stability, it is helpful to scale t.  A simple utility scale.py is included.
+Scale.py adds a column immediately following the t column you specify that is normalized from
+z = (t-tmin)/(tmax - tmin).
 
 
 DOUBLE EXPONENTIAL
 ==================
 
-One convenient model is that the traffic follows a double exponential function.
+One convenient model is that the traffic follows a double exponential function. (This may
+be useful as a slightly more analytially tractable estimate to the gamma distirbution.)
 
 Example: See the graph at http://blog.gnip.com/wp-content/uploads/2012/01/pubfits.png (associated 
 with the article at  http://blog.gnip.com/twitter-shouts-huntsmans-out/)
@@ -38,6 +44,9 @@ The fit.py utility fits the pulse in activity to a double exponential model of t
 t - time
 t0 - start of pulse
 A0, alpha, beta are parameters describing magnitude, growth and decay.
+
+Two versions of exponential fits are included as well (they accomplish the same fits, but
+have different numerical stability attributes.)
 
 FITS
 ====
@@ -167,9 +176,12 @@ Options:
   -p INIT_PARAMETERS, --init-parameters=INIT_PARAMETERS
                         Iinitial guess of parameters [A, alpha, beta, offset]
                         ([] or blank ok)
-  -c COLUMN, --column=COLUMN
-                        Column for fit data (0 is independent var, default
-                        dependent is 1)
+  -i ICOLUMN, --column-independent=ICOLUMN
+                        column of independent variable to fit (default is 1)
+  -c COLUMN, --column-dependent=COLUMN
+                        Column of dependent variable to fit (default is 2)
+  -l LABEL, --append-label=LABEL
+                        Append label column (useful as R factor)
   -f FUNC_NAME, --func-name=FUNC_NAME
                         gamma - gamma distribution; exp - exponential; dubex -
                         Pulse Function (default); lognorm - log-normal CDF;

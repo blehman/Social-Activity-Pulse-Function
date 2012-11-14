@@ -15,11 +15,11 @@ class func(base_function):
         self.A0 = float(_A0)
 
     def eval(self, x, baseline=None):
-        arg = (x - self.x0)
+        arg = (x - self.x0) * self.A0
         if arg < 0:
             return [0.0]
         c = self.b**(-self.a)
-        return [self.A0 * c * arg**(self.a - 1.) * math.exp(-arg/self.b)/scipy.special.gamma(self.a)]
+        return [c * arg**(self.a - 1.) * math.exp(-arg/self.b)/scipy.special.gamma(self.a)]
 
     def setParList(self, par):
         [self.x0, self.a, self.b, self.A0] = par
@@ -34,10 +34,10 @@ class func(base_function):
             if y[i] > ymax:
                 ymax = y[i]
                 xmax = x[i]
-        xrange = (x[-1] - x[0])
-        b = 0.5 * xrange 
+        xrng = (x[-1] - x[0])
+        b = 0.5 * xrng 
         a =  (xmax/b) + 1
-        A = ymax/4.
+        A = 10./(ymax*xrng)
         x0 = x[0] 
         res = [x0, a, b, A]
         return res
@@ -60,7 +60,6 @@ class func(base_function):
     # Output
     def __repr__(self):
         res =  "\n#  x0=%f\n#  a=%f\n#  b=%f\n#  A0=%f\n"%tuple(self.getParList())
-        res += "#  tOffset=%f\n"%self.x0
         res += "#  tavg=%f   f(tavg)=%fi\n"%self.getAvgT()
         res += "#  tpeak=%f   f(tpeak)=%f\n"%self.getPeakTime()  
         #res += "#  t1/2life=%f   f(t1/2Life)=%f\n"%self.getHalfLife()
