@@ -15,11 +15,11 @@ class func(base_function):
         self.A0 = float(_A0)
 
     def eval(self, x, baseline=None):
-        arg = (x - self.x0) * self.A0
+        arg = (x - self.x0)
         if arg < 0:
             return [0.0]
         c = self.b**(-self.a)
-        return [c * arg**(self.a - 1.) * math.exp(-arg/self.b)/scipy.special.gamma(self.a)]
+        return [self.A0 * c * arg**(self.a - 1.) * math.exp(-arg/self.b)/scipy.special.gamma(self.a)]
 
     def setParList(self, par):
         [self.x0, self.a, self.b, self.A0] = par
@@ -37,7 +37,7 @@ class func(base_function):
         xrng = (x[-1] - x[0])
         b = 0.5 * xrng 
         a =  (xmax/b) + 1
-        A = 10./(ymax*xrng)
+        A = ymax*4.
         x0 = x[0] 
         res = [x0, a, b, A]
         return res
@@ -52,17 +52,16 @@ class func(base_function):
         return peak + self.x0, self.eval(peak + self.x0)[0]
 
     def getHalfLife(self):
-        #
         # Half the events have been observed
-        #return t+self.x0,self.eval(t + self.x0)[0]
-        return -1,-1
+        t = self.b*scipy.special.gammaincinv(self.a, 0.5)
+        return t+self.x0,self.eval(t + self.x0)[0]
 
     # Output
     def __repr__(self):
         res =  "\n#  x0=%f\n#  a=%f\n#  b=%f\n#  A0=%f\n"%tuple(self.getParList())
         res += "#  tavg=%f   f(tavg)=%fi\n"%self.getAvgT()
         res += "#  tpeak=%f   f(tpeak)=%f\n"%self.getPeakTime()  
-        #res += "#  t1/2life=%f   f(t1/2Life)=%f\n"%self.getHalfLife()
+        res += "#  t1/2life=%f   f(t1/2Life)=%f\n"%self.getHalfLife()
         return res
 
 #########################
