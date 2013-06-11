@@ -26,8 +26,8 @@ class function_fit(object):
 			self.y.append(d[1])
 	
 	def fit(self):
-		self.fitPars, self.success = optimize.leastsq(self.f.erf, self.initPars, args=(self.x, self.y))
-		self.f.setParList(self.fitPars)
+		fitPars, self.success = optimize.leastsq(self.f.erf, self.initPars, args=(self.x, self.y))
+		self.f.setParList(fitPars)
 		return self.f
 
 	def eval(self, start=None, end=None, points=None):

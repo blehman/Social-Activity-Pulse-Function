@@ -35,10 +35,10 @@ class func(base_function):
                 return res
         
     def guessFromData(self, x, y):
-        l = int(0.1*len(x))
+        l = int(0.07*len(x))
         y1 = numpy.average(numpy.log(self.nonZeroVec(-l, y)))
         y0 = numpy.average(numpy.log(self.nonZeroVec(l, y)))
-        a = (math.log(y[-1]) - math.log(y[0]))/(x[-1] - x[0])
+        a = (y1 - y0)/(x[-1] - x[0])
         A = y[0]
         return [a, A]
 
