@@ -18,46 +18,55 @@ import gamma_function
 
 parser = OptionParser()
 parser.add_option("-p", "--init-parameters", dest="init_parameters",
-		help="Iinitial guess of parameters [A, alpha, beta, offset] ([] or blank ok)")
-parser.add_option("-c", "--column",  dest="column", default=1,
-		help="Column for fit data (0 is independent var, default dependent is 1)")
+        help="Iinitial guess of parameters [A, alpha, beta, offset] ([] or blank ok)")
+parser.add_option("-i", "--column-independent", dest="icolumn", default=1,
+        help="column of independent variable to fit (default is 1)")
+parser.add_option("-c", "--column-dependent",  dest="column", default=2,
+        help="Column of dependent variable to fit (default is 2)")
+parser.add_option("-l", "--append-label",  dest="label", default=None,
+        help="Append label column (useful as R factor)")
 parser.add_option("-f", "--func-name",  dest="func_name", default="dubex",
-		help="gamma - gamma distribution; exp - exponential; dubex - Pulse Function (default); lognorm - log-normal CDF; gauss - gaussian PDF")
+        help="gamma - gamma distribution; exp - exponential; dubex - Pulse Function (default); lognorm - log-normal CDF; gauss - gaussian PDF")
 parser.add_option("-r", "--range-list", dest="range_string", default = "[]",
-		help="Function evaluation output range as '[start time, end time, number of points]' If not set, evaluate at fit points.")
+        help="Function evaluation output range as '[start time, end time, number of points]' If not set, evaluate at fit points.")
 (options, args) = parser.parse_args()
 
 # p0 = [A, alpha, beta, t0]
 if options.init_parameters is None or options.init_parameters == '[]':
-	p0 = None
+    p0 = None
 else:
-	exec("p0=%s"%options.init_parameters)
+    exec("p0=%s"%options.init_parameters)
 
 # output range string
 [tstart, tend, points] = [None, None, None]
 if options.range_string <> '[]':
-	exec('[tstart, tend, points] = %s'%options.range_string)
+    exec('[tstart, tend, points] = %s'%options.range_string)
 
 # read data
-col = int(options.column)
+col = int(options.column) - 1
+icol = int(options.icolumn) - 1
+# keep leading columns for output
+lead_cols = {}
 d = []
 for r in csv.reader(sys.stdin):
-	try:
-		d.append([float(r[0]), float(r[col])])
-	except ValueError, e:
-		print "Skipping text values (%s)"%','.join(r)
+    try:
+        tmp = float(r[icol])
+        d.append([tmp, float(r[col])])
+        lead_cols[tmp] = r[:icol]
+    except ValueError, e:
+        print "Skipping text values (%s)"%','.join(r)
 
 # fit type
 if options.func_name == "lognorm":
-	func = lognormal_function.func()
+    func = lognormal_function.func()
 elif options.func_name == "gauss":
-	func = gauss_function.func()
+    func = gauss_function.func()
 elif options.func_name == "exp":
-	func = exp_function.func()
+    func = exp_function.func()
 elif options.func_name == "gamma":
-	func = gamma_function.func()
+    func = gamma_function.func()
 else:
-	func = doubleexp_function.func()
+    func = doubleexp_function.func()
 fr = function_fit(d, func, p0)
 # fit results
 print fr.fit()
@@ -70,4 +79,7 @@ d_dict = dict(d)
 f_dict = dict(fr.eval(start=tstart, end=tend, points=points))
 
 for time in sorted(list(set(d_dict.keys() + f_dict.keys()))):
-	wrt.writerow([time, d_dict.get(time, None), time,  f_dict.get(time, None)])
+    if options.label:
+        wrt.writerow(lead_cols[time] + [time, d_dict.get(time, None), time,  f_dict.get(time, None), options.label])
+    else:
+        wrt.writerow(lead_cols[time] + [time, d_dict.get(time, None), time,  f_dict.get(time, None)])
