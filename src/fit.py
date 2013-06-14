@@ -7,6 +7,7 @@ __license__="http://creativecommons.org/licenses/by-sa/3.0/"
 import math
 import sys
 import csv
+import fileinput
 from optparse import OptionParser
 
 from function_fit import *
@@ -48,7 +49,7 @@ icol = int(options.icolumn) - 1
 # keep leading columns for output
 lead_cols = {}
 d = []
-for r in csv.reader(sys.stdin):
+for r in csv.reader(fileinput.FileInput(args,openhook=fileinput.hook_compressed)):
     try:
         tmp = float(r[icol])
         d.append([tmp, float(r[col])])
