@@ -1,0 +1,13 @@
+Social Media Pulse Gallery
+
+Examples of events simultaneously observed and reported by social media users.
+
+Create a directory in this directory, e.g., "2013-04-01_AprilFools"
+
+Provide at least 5 files:
+
+(0) Raw social media activities in JSON format or reduced CSV format with at least id, date and text
+(1) timeline of created date-times
+(2) Fit got gamma
+(3) png example plot
+(4) description.txt describing the story behind the data
