@@ -17,10 +17,10 @@ class func(base_function):
 		self.S = float(_s)
 		self.M = float(_m)
 
-	def eval(self, x, baseline=None):
+	def eval(self, x):
 		arg = (math.log(x) - self.M)
 		arg /= (math.sqrt(2.) * self.S)
-		return [0.5*(1. + scipy.special.erf(arg))]
+		return [0.5*(1. + scipy.special.erf(arg)), x]
 
 	def setParList(self, par):
 		[self.S, self.M] = par

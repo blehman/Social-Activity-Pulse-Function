@@ -8,16 +8,17 @@ import sys
 from base_function import base_function
 
 class func(base_function):
-    """ This is the PARTIAL linear function (slope help constant, best fit to intercept
+    """ This is the PARTIAL linear function (slope held constant, best fit to intercept
     and associated utilities for evaluating and fitting. """
     def __init__(self, _m = 1., _b = 1.):
         self.m = float(_m)
         self.b = float(_b)
 
-    def eval(self, x, baseline=None):
-        return [self.m * x + self.b]
+    def eval(self, x):
+        return [self.m * x + self.b, x]
 
     def setParList(self, par):
+        # only fit y intercept
         [self.b] = par
 
     def getParList(self):

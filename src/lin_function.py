@@ -13,8 +13,8 @@ class func(base_function):
         self.m = float(_m)
         self.b = float(_b)
 
-    def eval(self, x, baseline=None):
-        return [self.m * x + self.b]
+    def eval(self, x):
+        return [self.m * x + self.b, x]
 
     def setParList(self, par):
         [self.m, self.b] = par

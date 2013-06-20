@@ -14,12 +14,12 @@ class func(base_function):
         self.b= float(_b)
         self.A0 = float(_A0)
 
-    def eval(self, x, baseline=None):
+    def eval(self, x):
         arg = (x - self.x0)
         if arg < 0:
             return [0.0]
         c = self.b**(-self.a)
-        return [self.A0 * c * arg**(self.a - 1.) * math.exp(-arg/self.b)/scipy.special.gamma(self.a)]
+        return [self.A0 * c * arg**(self.a - 1.) * math.exp(-arg/self.b)/scipy.special.gamma(self.a), x-self.x0]
 
     def setParList(self, par):
         [self.x0, self.a, self.b, self.A0] = par
