@@ -18,6 +18,8 @@ import exp_function
 import gamma_function
 import lin_function
 
+NA="NA"
+
 parser = OptionParser()
 parser.add_option("-p", "--init-parameters", dest="init_parameters",
         help="Iinitial guess of parameters [A, alpha, beta, offset] ([] or blank ok)")
@@ -55,7 +57,7 @@ for r in csv.reader(fileinput.FileInput(args,openhook=fileinput.hook_compressed)
         tmp = float(r[icol])
         d.append([tmp, float(r[col])])
         lead_cols[tmp] = r[:icol]
-        padding = ["n/a" for x in lead_cols[tmp]]
+        padding = [NA for x in lead_cols[tmp]]
     except ValueError, e:
         print "Skipping text values (%s)"%','.join(r)
 
@@ -85,7 +87,7 @@ d_dict = dict(d)
 f_dict = dict(fr.eval(start=tstart, end=tend, points=points))
 
 for time in sorted(list(set(d_dict.keys() + f_dict.keys()))):
-    res = lead_cols.get(time, padding) + [time, d_dict.get(time, "n/a"), time,  f_dict.get(time, "n/a")]
+    res = lead_cols.get(time, padding) + [time, d_dict.get(time, NA), time,  f_dict.get(time, NA)]
     if options.label:
         res.append(options.label)
     wrt.writerow(res)
