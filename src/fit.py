@@ -55,6 +55,7 @@ for r in csv.reader(fileinput.FileInput(args,openhook=fileinput.hook_compressed)
         tmp = float(r[icol])
         d.append([tmp, float(r[col])])
         lead_cols[tmp] = r[:icol]
+        padding = ["n/a" for x in lead_cols[tmp]]
     except ValueError, e:
         print "Skipping text values (%s)"%','.join(r)
 
@@ -84,7 +85,7 @@ d_dict = dict(d)
 f_dict = dict(fr.eval(start=tstart, end=tend, points=points))
 
 for time in sorted(list(set(d_dict.keys() + f_dict.keys()))):
-    res = lead_cols.get(time, None) + [time, d_dict.get(time, None), time,  f_dict.get(time, None)]
+    res = lead_cols.get(time, padding) + [time, d_dict.get(time, "n/a"), time,  f_dict.get(time, "n/a")]
     if options.label:
         res.append(options.label)
     wrt.writerow(res)
