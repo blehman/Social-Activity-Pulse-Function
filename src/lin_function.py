@@ -23,11 +23,8 @@ class func(base_function):
         return [self.m, self.b]
 
     def guessFromData(self, x, y):
-        l = int(0.07*len(x))
-        y1 = numpy.average(y[-l:])
-        y0 = numpy.average(y[:l])
-        m = (y1 - y0)/(x[-1] - x[0])
-        b = y1 - m * x[-1]
+        m = (y[-1] - y[0])/(x[-1] - x[0])
+        b = y[-1] - m * x[-1]
         return [m, b]
 
     # Output

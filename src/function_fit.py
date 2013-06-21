@@ -2,10 +2,7 @@
 __author__="Scott Hendrickson"
 __email__="shendrickson@gnip.com"
 __license__="http://creativecommons.org/licenses/by-sa/3.0/"
-###
 
-import math
-import sys
 import numpy
 from scipy import optimize
 

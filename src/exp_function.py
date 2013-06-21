@@ -4,7 +4,6 @@ __email__="shendrickson@gnip.com"
 __license__="http://creativecommons.org/licenses/by-sa/3.0/"
 import math
 import numpy
-import sys
 from base_function import base_function
 
 class func(base_function):
@@ -22,24 +21,11 @@ class func(base_function):
     def getParList(self):
         return [self.a, self.A0]
 
-    def nonZeroVec(self, n, l):
-        res = []
-        cnt = 0
-        if n < 0:
-            l.reverse()
-        for x in l:
-            if x != 0:
-                res.append(x)
-                cnt +=1
-            if cnt >= n:
-                return res
-        
     def guessFromData(self, x, y):
-        l = int(0.07*len(x))
-        y1 = numpy.average(numpy.log(self.nonZeroVec(-l, y)))
-        y0 = numpy.average(numpy.log(self.nonZeroVec(l, y)))
+        y1 = numpy.log(y[-1])
+        y0 = numpy.log(y[0])
         a = (y1 - y0)/(x[-1] - x[0])
-        A = y[0]
+        A = numpy.exp(numpy.log(y[0])/(a*x[0]))
         return [a, A]
 
     # Output

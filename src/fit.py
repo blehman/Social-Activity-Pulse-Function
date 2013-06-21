@@ -16,6 +16,7 @@ import lognormal_function
 import gauss_function
 import exp_function
 import gamma_function
+import lin_function
 
 parser = OptionParser()
 parser.add_option("-p", "--init-parameters", dest="init_parameters",
@@ -66,9 +67,12 @@ elif options.func_name == "exp":
     func = exp_function.func()
 elif options.func_name == "gamma":
     func = gamma_function.func()
+elif options.func_name == "lin":
+    func = lin_function.func()
 else:
     func = doubleexp_function.func()
 fr = function_fit(d, func, p0)
+
 # fit results
 print fr.fit()
 
@@ -80,7 +84,7 @@ d_dict = dict(d)
 f_dict = dict(fr.eval(start=tstart, end=tend, points=points))
 
 for time in sorted(list(set(d_dict.keys() + f_dict.keys()))):
+    res = lead_cols.get(time, None) + [time, d_dict.get(time, None), time,  f_dict.get(time, None)]
     if options.label:
-        wrt.writerow(lead_cols[time] + [time, d_dict.get(time, None), time,  f_dict.get(time, None), options.label])
-    else:
-        wrt.writerow(lead_cols[time] + [time, d_dict.get(time, None), time,  f_dict.get(time, None)])
+        res.append(options.label)
+    wrt.writerow(res)
